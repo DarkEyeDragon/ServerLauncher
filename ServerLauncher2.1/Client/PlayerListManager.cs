@@ -8,6 +8,10 @@ namespace ServerLauncher.Client
 {
     static class PlayerListManager
     {
-        public static readonly List<Player> PlayerList = new List<Player>();
+        public static List<Player> PlayerList = new List<Player>();
+        public static void Remove(string username)
+        {
+            PlayerList = PlayerList.Where(p => p.Username != username).ToList();
+        }
     }
 }
