@@ -61,7 +61,7 @@
                         <TextBlock Text="Players"/>
                     </StackPanel>
                 </TabItem.Header>
-                <Grid Name="PlayerList">
+                <Grid Name="PlayerListGrid">
 
                 </Grid>
             </TabItem>

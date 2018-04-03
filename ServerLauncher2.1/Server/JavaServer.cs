@@ -2,9 +2,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
 
 namespace ServerLauncher.Server
 {
@@ -80,26 +77,17 @@ namespace ServerLauncher.Server
                 joinedPlayer.Username = splitted[5];
                 joinedPlayer.UUID = splitted[7];
                 PlayerListManager.PlayerList.Add(joinedPlayer);
-                Application.Current.Dispatcher.Invoke(new Action(() =>
-                {
-                    Label username = new Label { Margin = new Thickness(20, PlayerListManager.PlayerList.Count * 20, 0, 0), Content = joinedPlayer.Username, Name=joinedPlayer.Username };
-                    MainWin.PlayerList.Children.Add(username);
-                }));
+                PlayerListManager.Display(MainWin);
 
             }
             if (output.Contains("lost connection: "))
             {
                 string[] disconnectMessage = output.Split(' ');
 
-                PlayerListManager.Remove(disconnectMessage[2]);
+                PlayerListManager.Remove(disconnectMessage[2], MainWin);
+                PlayerListManager.Display(MainWin);
                 OutputHandler.Log(output, MainWin);
-                Application.Current.Dispatcher.Invoke(new Action(() =>
-                {
-                    foreach (UIElement ui in MainWin.PlayerList.Children.Cast<UIElement>().Where(p => p is Label && ((Label)p).Content.ToString() == disconnectMessage[2]).ToList())
-                    {
-                        MainWin.PlayerList.Children.Remove(ui);
-                    }
-                }));
+                
             }
 
 

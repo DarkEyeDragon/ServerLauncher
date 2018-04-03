@@ -12,7 +12,7 @@ namespace ServerLauncher.Client
 {
     static class ConfigHandler
     {
-        private static readonly string location = ;
+        private static readonly string location = Directory.GetCurrentDirectory();
         private static readonly string file = Path.Combine(location, "config.json");
         public static ConfigItem Startup  { get; set; }
 
