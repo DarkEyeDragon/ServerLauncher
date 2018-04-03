@@ -8,23 +8,13 @@ namespace ServerLauncher.Server
     class JavaServer : IServer
     {
 
-        private string xms;
         private string ServerJar { get; set; }
         private Process process;
         public MainWindow MainWin { get; set; }
         private string Folder { get; set; }
-        private string XMS
-        {
-            get { return xms; }
-            set { xms = value; }
-        }
-        private string xmx;
+        private string XMS { get; set; }
 
-        public string XMX
-        {
-            get { return xmx; }
-            set { xmx = value; }
-        }
+        public string XMX { get; set; }
 
         public Process ServerProcess { get => process; }
 
