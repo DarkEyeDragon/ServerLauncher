@@ -54,6 +54,9 @@
     <StartupObject>
     </StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>serverlauncher-icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -83,6 +86,7 @@
     </ApplicationDefinition>
     <Compile Include="Client\ConfigHandler.cs" />
     <Compile Include="Client\ConfigItem.cs" />
+    <Compile Include="Client\PopupMenu.cs" />
     <Compile Include="Client\Player.cs" />
     <Compile Include="Client\PlayerListManager.cs" />
     <Compile Include="Client\Settings.cs" />
@@ -132,7 +136,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="serverlauncher-icon.ico" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
       <Visible>False</Visible>

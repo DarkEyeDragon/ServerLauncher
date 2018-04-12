@@ -9,6 +9,7 @@ namespace ServerLauncher
     public partial class MainWindow : Window
     {
         JavaServer paper;
+        public static MainWindow mainwin;
         public MainWindow()
         {
             InitializeComponent();
@@ -17,6 +18,7 @@ namespace ServerLauncher
             Settings.Load(this);
             paper = new JavaServer(ConfigHandler.Startup.Items[0], ConfigHandler.Startup.Items[1], "paper/PaperSpigot-latest.jar", this);
             paper.Start();
+            mainwin = this;
         }
 
         private void ConsoleInputBox_KeyUp(object sender, KeyEventArgs e)
@@ -52,5 +54,6 @@ namespace ServerLauncher
             ConfigHandler.Add(configItem);
             ConfigHandler.Load();
         }
+
     }
 }
