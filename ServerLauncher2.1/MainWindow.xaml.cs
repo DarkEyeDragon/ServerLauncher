@@ -1,6 +1,8 @@
-﻿using ServerLauncher.Client;
+﻿using Microsoft.Win32;
+using ServerLauncher.Client;
 using ServerLauncher.Server;
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -8,38 +10,42 @@ namespace ServerLauncher
 {
     public partial class MainWindow : Window
     {
-        JavaServer paper;
+        JavaServer javaServer;
         public MainWindow()
         {
             InitializeComponent();
             ConfigHandler.Create();
             ConfigHandler.Load();
             Settings.Load(this);
-            paper = new JavaServer(ConfigHandler.Startup.Items[0], ConfigHandler.Startup.Items[1], "paper/PaperSpigot-latest.jar", this);
-            paper.Start();
+            javaServer = new JavaServer(inputXMS.Text, inputXMX.Text);
+            //javaServer.Start();
         }
+
 
         private void ConsoleInputBox_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
+                
+
                 if (ConsoleInputBox.Text.ToLower().Equals("start"))
                 {
-                    if (paper.ServerProcess.HasExited)
+                    try
                     {
-                        ConfigHandler.Load();
-                        paper = new JavaServer(ConfigHandler.Startup.Items[0], ConfigHandler.Startup.Items[1], "paper/PaperSpigot-latest.jar", this);
-                        paper.Start();
+                        
+
+                        javaServer = new JavaServer(inputXMS.Text, inputXMX.Text);
+                        javaServer.Start();
                     }
-                    else
+                    catch (NullReferenceException ex)
                     {
-                        paper.Output("Server still running!");
+                        OutputHandler.Log(ex.ToString(), Level.ERROR);
                     }
                 }  
                 else if (ConsoleInputBox.Text.ToLower().Equals("stop"))
-                    paper.Stop();
+                    javaServer.Stop();
                 else
-                    paper.Input(ConsoleInputBox.Text);
+                    javaServer.Input(ConsoleInputBox.Text);
                 ConsoleInputBox.Text = "";
             }
             
@@ -51,6 +57,16 @@ namespace ServerLauncher
             ConfigItem configItem = new ConfigItem { Name = "Startup", Items = startupSettings };
             ConfigHandler.Add(configItem);
             ConfigHandler.Load();
+        }
+
+        private void btnJarLocation_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                inputJarLocation.Text = openFileDialog.FileName;
+                ConfigItem jarLocation = new ConfigItem { Name = "JarLocation", Item = openFileDialog.FileName };
+            }
         }
     }
 }

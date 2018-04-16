@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 
 namespace ServerLauncher.Client
@@ -39,6 +40,11 @@ namespace ServerLauncher.Client
         {
             string json = JsonConvert.SerializeObject(configItem);
             File.WriteAllText(file, json);
+        }
+
+        public static void SetDefault()
+        {
+            Settings.SetToDefault();
         }
     }
 }
