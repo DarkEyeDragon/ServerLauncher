@@ -11,9 +11,9 @@ namespace ServerLauncher.Client
     enum Level {INFO, WARN, ERROR}
     static class OutputHandler
     {
-        public static void Log(string output, Level level, MainWindow window)
+        private static MainWindow main = ((MainWindow)(Application.Current.MainWindow));
+        public static void Log(string output, Level level)
         {
-            var main = Application.Current;
             if (!string.IsNullOrEmpty(output))
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -25,19 +25,20 @@ namespace ServerLauncher.Client
                         outputLine = new Run(output + Environment.NewLine) { Foreground = Brushes.Orange };
                     else if(level == Level.ERROR)
                         outputLine = new Run(output + Environment.NewLine) { Foreground = Brushes.Red };
-                    window.outputstream.Inlines.Add(outputLine);
-                    window.scrollviewer.ScrollToBottom();
+                    main.outputstream.Inlines.Add(outputLine);
+                    main.scrollviewer.ScrollToBottom();
                 }));
             }
         }
-        public static void Log(string output, MainWindow window)
+        public static void Log(string output)
         {
             if (!string.IsNullOrEmpty(output))
             {
-                window.Dispatcher.Invoke(new Action(() =>
+                main.Dispatcher.Invoke(new Action(() =>
                 {
-                     window.outputstream.Inlines.Add(new Run(output + Environment.NewLine));
-                    window.scrollviewer.ScrollToBottom();
+                    MainWindow main = ((MainWindow)Application.Current.MainWindow);
+                    main.outputstream.Inlines.Add(new Run(output + Environment.NewLine));
+                    main.scrollviewer.ScrollToBottom();
                 }));
             }
         }

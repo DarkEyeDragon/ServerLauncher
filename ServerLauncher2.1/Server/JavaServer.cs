@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 
 namespace ServerLauncher.Server
 {
@@ -18,13 +19,13 @@ namespace ServerLauncher.Server
 
         public Process ServerProcess { get => process; }
 
-        public JavaServer(string xms, string xmx, string jarLocation, MainWindow mainwindow)
+        public JavaServer(string xms, string xmx)
         {
             XMS = xms;
             XMX = xmx;
-            ServerJar = jarLocation.Split('/')[1];
-            Folder = jarLocation.Split('/')[0];
-            MainWin = mainwindow;
+            MainWin = ((MainWindow)(Application.Current.MainWindow));
+            Folder = MainWin.inputJarLocation.Text;
+            ServerJar = Path.GetFileName(MainWin.inputJarLocation.Text);
         }
 
         public void Start()
@@ -34,8 +35,7 @@ namespace ServerLauncher.Server
             process.StartInfo.FileName = "java";
             process.StartInfo.Arguments = $"-Xms{XMS} -Xmx{XMX} -jar {ServerJar} nogui";
             process.StartInfo.UseShellExecute = false;
-            Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, Folder));
-            process.StartInfo.WorkingDirectory = Path.Combine(Environment.CurrentDirectory, Folder);
+            process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Folder);
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardInput = true;
             process.StartInfo.CreateNoWindow = true;
@@ -57,9 +57,9 @@ namespace ServerLauncher.Server
                 return;
             
             if (output.Contains("WARN]: "))
-                OutputHandler.Log(output, Level.WARN, MainWin);
+                OutputHandler.Log(output, Level.WARN);
             else if (output.Contains("ERROR]: "))
-                OutputHandler.Log(output, Level.ERROR, MainWin);
+                OutputHandler.Log(output, Level.ERROR);
             else if (output.Contains("INFO]: UUID of player "))
             {
                 Player joinedPlayer = new Player();
@@ -76,13 +76,13 @@ namespace ServerLauncher.Server
 
                 PlayerListManager.Remove(disconnectMessage[2], MainWin);
                 PlayerListManager.Display(MainWin);
-                OutputHandler.Log(output, MainWin);
+                OutputHandler.Log(output);
                 
             }
 
 
             else
-                OutputHandler.Log(output, MainWin);
+                OutputHandler.Log(output);
                 
         }
         public void Input(String input)
