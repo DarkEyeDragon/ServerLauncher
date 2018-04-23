@@ -66,7 +66,7 @@ namespace ServerLauncher.Server
                 string[] splitted = output.Split(' ');
                 joinedPlayer.Username = splitted[5];
                 joinedPlayer.UUID = splitted[7];
-                PlayerListManager.playerList.Add(joinedPlayer);
+                PlayerListManager.PlayerList.Add(joinedPlayer);
                 PlayerListManager.Display(MainWin);
 
             }
