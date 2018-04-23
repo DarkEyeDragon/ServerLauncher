@@ -14,6 +14,14 @@ namespace ServerLauncher.Server
         public MainWindow MainWin { get; set; }
         private string Folder { get; set; }
         private string XMS { get; set; }
+        private long currentRam;
+
+        public long RAM
+        {
+            get { return process.PrivateMemorySize64; }
+            set { currentRam = value; }
+        }
+
 
         public string XMX { get; set; }
 
@@ -66,7 +74,7 @@ namespace ServerLauncher.Server
                 string[] splitted = output.Split(' ');
                 joinedPlayer.Username = splitted[5];
                 joinedPlayer.UUID = splitted[7];
-                PlayerListManager.playerList.Add(joinedPlayer);
+                PlayerListManager.PlayerList.Add(joinedPlayer);
                 PlayerListManager.Display(MainWin);
 
             }
