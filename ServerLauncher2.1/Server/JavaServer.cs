@@ -1,4 +1,7 @@
-﻿using ServerLauncher.Client;
+﻿using LiveCharts;
+using ServerLauncher.Client;
+using ServerLauncher.Graphs;
+using ServerLauncher.Timers;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -14,11 +17,21 @@ namespace ServerLauncher.Server
         public MainWindow MainWin { get; set; }
         private string Folder { get; set; }
         private string XMS { get; set; }
-        private long currentRam;
+        private int currentRam;
 
-        public long RAM
+        PointShapeLine graph;
+        RamChartUpdater updater;
+
+
+        public int RAM
         {
-            get { return process.PrivateMemorySize64; }
+            get {
+                process.Refresh();
+                if (!process.HasExited)
+                    return (int)process.PrivateMemorySize64/ 1048576;
+                else
+                    return 0;
+            }
             set { currentRam = value; }
         }
 
@@ -51,12 +64,14 @@ namespace ServerLauncher.Server
             process.OutputDataReceived += (sender, args) => { Output(args.Data); };
             process.Start();
             process.BeginOutputReadLine();
+            //TODO FIX GRAPH
+            graph = new PointShapeLine();
+            updater = new RamChartUpdater(this, graph);
         }
 
         public void Stop()
         {
             process.StandardInput.WriteLine("stop");
-
         }
 
         public void Output(String output)

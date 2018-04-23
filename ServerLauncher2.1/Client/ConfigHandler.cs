@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Windows;
 
 namespace ServerLauncher.Client
 {
@@ -23,18 +24,29 @@ namespace ServerLauncher.Client
                 if (!File.Exists(file))
                 {
                     File.Create(file);
+                    SetDefault();
+                    Save();
                 }
             }
             else
             {
                 File.Delete(file);
                 File.Create(file);
+                SetDefault();
+                Save();
             }
         }
         public static void Load()
         {
-            ConfigItem json = JsonConvert.DeserializeObject<ConfigItem>(File.ReadAllText(file));
-            Startup = json;
+            try
+            {
+                ConfigItem json = JsonConvert.DeserializeObject<ConfigItem>(File.ReadAllText(file));
+                Startup = json;
+            }
+            catch (Exception ex)
+            {
+                OutputHandler.Log(ex.Message);
+            }
         }
         public static void Add(ConfigItem configItem)
         {
@@ -45,6 +57,15 @@ namespace ServerLauncher.Client
         public static void SetDefault()
         {
             Settings.SetToDefault();
+            Save();
+        }
+        public static void Save()
+        {
+            MainWindow main = ((MainWindow)(Application.Current.MainWindow));
+            String[] startupSettings = { main.inputXMS.Text, main.inputXMX.Text, main.inputJarLocation.Text, main.checkboxAutoStart.IsChecked.ToString()};
+            ConfigItem configItem = new ConfigItem { Name = "Startup", Items = startupSettings };
+            Add(configItem);
+            Load();
         }
     }
 }

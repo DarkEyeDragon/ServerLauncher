@@ -30,6 +30,7 @@ namespace ServerLauncher.Client
         public static void Update()
         {
             PlayerListLables.Clear();
+            PlayerListButtons.Clear();
             for (int i = 0; i < PlayerList.Count; i++)
             {
                 Label username = new Label { Margin = new Thickness(20, i * 20, 0, 0), Content= PlayerList[i].Username, Name = PlayerList[i].Username };

@@ -101,6 +101,7 @@
     <Compile Include="Server\InputHandler.cs" />
     <Compile Include="Server\JavaServer.cs" />
     <Compile Include="Server\Server.cs" />
+    <Compile Include="Timers\ChartUpdater.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

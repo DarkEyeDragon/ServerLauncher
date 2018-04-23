@@ -19,7 +19,9 @@ namespace ServerLauncher
             ConfigHandler.Load();
             Settings.Load(this);
             javaServer = new JavaServer(inputXMS.Text, inputXMX.Text);
-            //javaServer.Start();
+            OutputHandler.Log("Ready for launch!");
+            if (Settings.AutoStart)
+                javaServer.Start();
         }
 
 
@@ -35,7 +37,6 @@ namespace ServerLauncher
                     {
                         javaServer = new JavaServer(inputXMS.Text, inputXMX.Text);
                         javaServer.Start();
-                        PointShapeLine graph = new PointShapeLine(javaServer.RAM);
 
                     }
                     catch (NullReferenceException ex)
@@ -54,7 +55,7 @@ namespace ServerLauncher
 
         private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
         {
-            String[] startupSettings = { inputXMS.Text, inputXMX.Text};
+            String[] startupSettings = { inputXMS.Text, inputXMX.Text, inputJarLocation.Text, checkboxAutoStart.IsChecked.ToString()};
             ConfigItem configItem = new ConfigItem { Name = "Startup", Items = startupSettings };
             ConfigHandler.Add(configItem);
             ConfigHandler.Load();
@@ -66,7 +67,6 @@ namespace ServerLauncher
             if (openFileDialog.ShowDialog() == true)
             {
                 inputJarLocation.Text = openFileDialog.FileName;
-                ConfigItem jarLocation = new ConfigItem { Name = "JarLocation", Item = openFileDialog.FileName };
             }
         }
     }
