@@ -55,5 +55,7 @@ namespace ServerLauncher.Client
                 }
             }));
         }
+
+        //string test = $"this is a test if {if(true) "bread" else "not bread"}";
     }
 }

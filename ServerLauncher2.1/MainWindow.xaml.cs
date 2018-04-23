@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using ServerLauncher.Client;
+using ServerLauncher.Graphs;
 using ServerLauncher.Server;
 using System;
 using System.IO;
@@ -32,10 +33,10 @@ namespace ServerLauncher
                 {
                     try
                     {
-                        
-
                         javaServer = new JavaServer(inputXMS.Text, inputXMX.Text);
                         javaServer.Start();
+                        PointShapeLine graph = new PointShapeLine(javaServer.RAM);
+
                     }
                     catch (NullReferenceException ex)
                     {
