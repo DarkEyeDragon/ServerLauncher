@@ -5,7 +5,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Minecraft Server Launcher" Height="350" Width="587">
+        Title="Minecraft Server Launcher" Height="350" Width="587"
+        Closing="Window_Closing">
     <Grid>
         <TabControl>
             <TabItem>
@@ -40,6 +41,7 @@
                         <Button Name="BtnSaveSettings1" Content="Save" HorizontalAlignment="Left" Margin="76,141,0,0" VerticalAlignment="Top" Width="82" Click="BtnSaveSettings_Click" Height="23" />
                         <Label Content="Server JAR" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,30,0,0"/>
                         <CheckBox Name="checkboxAutoStart" Content="Autostart server" HorizontalAlignment="Left" Margin="274,87,0,0" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="checkboxDebug" Content="Debug" HorizontalAlignment="Left" Margin="274,118,0,0" VerticalAlignment="Top"/>
                     </Grid>
                 </GroupBox>
             </TabItem>
@@ -52,7 +54,7 @@
                 <Grid>
                     <lvc:CartesianChart Name="stats" LegendLocation="Right" >
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="RAM" LabelFormatter="{Binding YFormatter}" MinValue="0" MaxValue="2000"></lvc:Axis>
+                            <lvc:Axis Title="RAM" LabelFormatter="{Binding YFormatter}" MinValue="0" MaxValue="{Binding XMX, Mode=OneWay}"></lvc:Axis>
                         </lvc:CartesianChart.AxisY>
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis Title="Seconds" Labels="{Binding Labels}"></lvc:Axis>
@@ -68,7 +70,27 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Name="PlayerListGrid">
-
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="72" />
+                        <ColumnDefinition Width="124" />
+                        <ColumnDefinition Width="87" />
+                        <ColumnDefinition Width="80" />
+                        <ColumnDefinition Width="80" />
+                        <ColumnDefinition Width="80" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="1">Username</Label>
+                    <Label Grid.Column="2">Action</Label>
                 </Grid>
             </TabItem>
         </TabControl>

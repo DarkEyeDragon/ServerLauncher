@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace ServerLauncher.Server
 {
-    class JavaServer : IServer
+    public class JavaServer : IServer
     {
 
         private string ServerJar { get; set; }
@@ -65,34 +65,52 @@ namespace ServerLauncher.Server
             process.Start();
             process.BeginOutputReadLine();
             //TODO FIX GRAPH
-            graph = new PointShapeLine();
-            updater = new RamChartUpdater(this, graph);
+            if (graph == null)
+            {
+                graph = new PointShapeLine();
+            }
+            if (updater == null)
+                updater = new RamChartUpdater(this, graph);
+            else
+                updater.Timer.Start();
+            Watchdog.Start();
         }
 
         public void Stop()
         {
             process.StandardInput.WriteLine("stop");
+            graph.Clear();
+            updater.Timer.Stop();
+            Watchdog.Stop();
         }
 
         public void Output(String output)
         {
+            Watchdog.running = true;
             if (string.IsNullOrEmpty(output))
                 return;
-            
+
             if (output.Contains("WARN]: "))
                 OutputHandler.Log(output, Level.WARN);
             else if (output.Contains("ERROR]: "))
                 OutputHandler.Log(output, Level.ERROR);
-            else if (output.Contains("INFO]: UUID of player "))
+            else if (output.Contains("INFO]: "))
             {
-                Player joinedPlayer = new Player();
-                string[] splitted = output.Split(' ');
-                joinedPlayer.Username = splitted[5];
-                joinedPlayer.UUID = splitted[7];
-                PlayerListManager.PlayerList.Add(joinedPlayer);
-                PlayerListManager.Display(MainWin);
+                if (output.Contains("INFO]: UUID of player "))
+                {
+                    Player joinedPlayer = new Player();
+                    string[] splitted = output.Split(' ');
+                    joinedPlayer.Username = splitted[5];
+                    joinedPlayer.UUID = splitted[7];
+                    PlayerListManager.PlayerList.Add(joinedPlayer);
+                    PlayerListManager.Display(MainWin);
 
+                }
+                else
+                    OutputHandler.Log(output);
             }
+            else
+                OutputHandler.Log(output);
             if (output.Contains("lost connection: "))
             {
                 string[] disconnectMessage = output.Split(' ');
@@ -100,17 +118,18 @@ namespace ServerLauncher.Server
                 PlayerListManager.Remove(disconnectMessage[2], MainWin);
                 PlayerListManager.Display(MainWin);
                 OutputHandler.Log(output);
-                
             }
-
-
-            else
-                OutputHandler.Log(output);
+            else if (output.ToLower().Contains("**** failed to bind to port"))
+            {
+                process.StandardInput.WriteLine("stop");
+                updater.Timer.Stop();
+                Watchdog.Stop();
+            }
                 
         }
         public void Input(String input)
         {
-            InputHandler.Command(process, input);
+            CommandExecutor.Command(process, input);
         }
     }
 }

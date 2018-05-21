@@ -16,6 +16,7 @@ namespace ServerLauncher.Client
             if (!File.Exists(file))
             {
                 File.Create(file);
+                SetDefault();
             }
         }
         public static void Create(bool writeOver)
@@ -25,7 +26,6 @@ namespace ServerLauncher.Client
                 {
                     File.Create(file);
                     SetDefault();
-                    Save();
                 }
             }
             else
@@ -33,7 +33,6 @@ namespace ServerLauncher.Client
                 File.Delete(file);
                 File.Create(file);
                 SetDefault();
-                Save();
             }
         }
         public static void Load()

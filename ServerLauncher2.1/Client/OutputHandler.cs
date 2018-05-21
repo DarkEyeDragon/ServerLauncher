@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
@@ -14,7 +15,7 @@ namespace ServerLauncher.Client
         private static MainWindow main = ((MainWindow)(Application.Current.MainWindow));
         public static void Log(string output, Level level)
         {
-            if (!string.IsNullOrEmpty(output))
+            if (!string.IsNullOrEmpty(output) && main != null)
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
@@ -36,9 +37,18 @@ namespace ServerLauncher.Client
             {
                 main.Dispatcher.Invoke(new Action(() =>
                 {
-                    MainWindow main = ((MainWindow)Application.Current.MainWindow);
-                    main.outputstream.Inlines.Add(new Run(output + Environment.NewLine));
-                    main.scrollviewer.ScrollToBottom();
+                    try
+                    {
+                        MainWindow main = ((MainWindow)Application.Current.MainWindow);
+                        if (main == null) return;
+                        main.outputstream.Inlines.Add(new Run(output + Environment.NewLine));
+                        main.scrollviewer.ScrollToBottom();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLineIf(main == null, e);
+                    }
+                    
                 }));
             }
         }

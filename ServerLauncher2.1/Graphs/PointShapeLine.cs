@@ -13,7 +13,7 @@ namespace ServerLauncher.Graphs
 {
     public class PointShapeLine : UserControl
     {
-
+        MainWindow main;
         public PointShapeLine()
         {
             SeriesCollection = new SeriesCollection
@@ -24,7 +24,7 @@ namespace ServerLauncher.Graphs
                     Values = new ChartValues<int> {}
                 }
             };
-            MainWindow main = ((MainWindow)(Application.Current.MainWindow));
+            main = ((MainWindow)(Application.Current.MainWindow));
             main.stats.Series.Add(SeriesCollection[0]);
         }
 
@@ -33,5 +33,10 @@ namespace ServerLauncher.Graphs
             SeriesCollection[0].Values.Add(datapoint);
         }
         public SeriesCollection SeriesCollection { get; }
+
+        public void Clear()
+        {
+            while (main.stats.Series.Count > 0) { main.stats.Series.RemoveAt(0); }
+        }
     }
 }

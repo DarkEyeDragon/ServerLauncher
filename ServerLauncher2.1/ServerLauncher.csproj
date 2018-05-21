@@ -97,8 +97,9 @@
     <Compile Include="Client\PlayerListManager.cs" />
     <Compile Include="Client\Settings.cs" />
     <Compile Include="Client\OutputHandler.cs" />
+    <Compile Include="Client\Watchdog.cs" />
     <Compile Include="Graphs\PointShapeLine.cs" />
-    <Compile Include="Server\InputHandler.cs" />
+    <Compile Include="Server\CommandExecutor.cs" />
     <Compile Include="Server\JavaServer.cs" />
     <Compile Include="Server\Server.cs" />
     <Compile Include="Timers\ChartUpdater.cs" />

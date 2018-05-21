@@ -1,9 +1,7 @@
 ﻿using Microsoft.Win32;
 using ServerLauncher.Client;
-using ServerLauncher.Graphs;
 using ServerLauncher.Server;
 using System;
-using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -11,17 +9,21 @@ namespace ServerLauncher
 {
     public partial class MainWindow : Window
     {
-        JavaServer javaServer;
+        public bool Debug { get; set; }
+        public JavaServer JavaServer { get; set; }
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = JavaServer;
             ConfigHandler.Create();
             ConfigHandler.Load();
-            Settings.Load(this);
-            javaServer = new JavaServer(inputXMS.Text, inputXMX.Text);
+            Settings.Load();
+            JavaServer = new JavaServer(inputXMS.Text, inputXMX.Text);
             OutputHandler.Log("Ready for launch!");
             if (Settings.AutoStart)
-                javaServer.Start();
+                JavaServer.Start();
+            if (Settings.Debug)
+                Debug = true;
         }
 
 
@@ -35,9 +37,8 @@ namespace ServerLauncher
                 {
                     try
                     {
-                        javaServer = new JavaServer(inputXMS.Text, inputXMX.Text);
-                        javaServer.Start();
-
+                        JavaServer = new JavaServer(inputXMS.Text, inputXMX.Text);
+                        JavaServer.Start();
                     }
                     catch (NullReferenceException ex)
                     {
@@ -45,9 +46,22 @@ namespace ServerLauncher
                     }
                 }  
                 else if (ConsoleInputBox.Text.ToLower().Equals("stop"))
-                    javaServer.Stop();
+                    JavaServer.Stop();
+                else if (ConsoleInputBox.Text.ToLower().Equals("restart"))
+                {
+                    try
+                    {
+                        JavaServer.Stop();
+                        JavaServer = new JavaServer(inputXMS.Text, inputXMX.Text);
+                        JavaServer.Start();
+                    }
+                    catch (NullReferenceException ex)
+                    {
+                        OutputHandler.Log(ex.ToString(), Level.ERROR);
+                    }
+                }
                 else
-                    javaServer.Input(ConsoleInputBox.Text);
+                    JavaServer.Input(ConsoleInputBox.Text);
                 ConsoleInputBox.Text = "";
             }
             
@@ -55,10 +69,13 @@ namespace ServerLauncher
 
         private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
         {
-            String[] startupSettings = { inputXMS.Text, inputXMX.Text, inputJarLocation.Text, checkboxAutoStart.IsChecked.ToString()};
+            String[] startupSettings = { inputXMS.Text, inputXMX.Text, inputJarLocation.Text, checkboxAutoStart.IsChecked.ToString(), checkboxDebug.IsChecked.ToString() };
             ConfigItem configItem = new ConfigItem { Name = "Startup", Items = startupSettings };
             ConfigHandler.Add(configItem);
             ConfigHandler.Load();
+            Debug = (bool)checkboxDebug.IsChecked;
+
+
         }
 
         private void btnJarLocation_Click(object sender, RoutedEventArgs e)
@@ -68,6 +85,15 @@ namespace ServerLauncher
             {
                 inputJarLocation.Text = openFileDialog.FileName;
             }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            
+            e.Cancel = true;
+            CommandExecutor.Command("stop");
+            e.Cancel = false;
+            
         }
     }
 }
