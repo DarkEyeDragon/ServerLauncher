@@ -1,9 +1,5 @@
 ﻿using ServerLauncher.Server;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -34,18 +30,18 @@ namespace ServerLauncher.Client
         private static void OnTimerTick(object sender, EventArgs e)
         {
             MainWindow main = ((MainWindow)Application.Current.MainWindow);
-            if(main.Debug) OutputHandler.Log($"Running: {running} \r\n Failed attempts: {failedAttempts}");
+            if(main.Debug) OutputHandler.Log($"Running: {running} Failed attempts: {failedAttempts}");
 
             if (running)
                 failedAttempts = 0;
             else
             {
-                if (failedAttempts > 60)
+                if (failedAttempts == 60)
                 {
                     OutputHandler.Log("Server is idle... checking if it's still responding!", Level.WARN);
                     CommandExecutor.Command("list");
                 }
-                if (failedAttempts > 180)
+                if (failedAttempts >= 90)
                 {
                     OutputHandler.Log("Server has not responded in a long time! Restarting...", Level.WARN);
                     main.JavaServer.Stop();
