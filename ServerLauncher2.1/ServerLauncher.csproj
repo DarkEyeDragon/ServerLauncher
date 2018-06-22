@@ -92,7 +92,6 @@
     </ApplicationDefinition>
     <Compile Include="Client\ConfigHandler.cs" />
     <Compile Include="Client\ConfigItem.cs" />
-    <Compile Include="Client\PopupMenu.cs" />
     <Compile Include="Client\Player.cs" />
     <Compile Include="Client\PlayerListManager.cs" />
     <Compile Include="Client\Settings.cs" />

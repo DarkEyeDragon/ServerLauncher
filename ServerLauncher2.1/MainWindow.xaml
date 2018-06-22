@@ -54,7 +54,7 @@
                 <Grid>
                     <lvc:CartesianChart Name="stats" LegendLocation="Right" >
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="RAM" LabelFormatter="{Binding YFormatter}" MinValue="0" MaxValue="{Binding XMX, Mode=OneWay}"></lvc:Axis>
+                            <lvc:Axis Title="RAM" LabelFormatter="{Binding YFormatter}" MinValue="0" MaxValue="2000"></lvc:Axis>
                         </lvc:CartesianChart.AxisY>
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis Title="Seconds" Labels="{Binding Labels}"></lvc:Axis>
