@@ -1,5 +1,4 @@
-﻿using LiveCharts;
-using ServerLauncher.Client;
+﻿using ServerLauncher.Client;
 using ServerLauncher.Graphs;
 using ServerLauncher.Timers;
 using System;
@@ -102,12 +101,10 @@ namespace ServerLauncher.Server
                     string[] splitted = output.Split(' ');
                     joinedPlayer.Username = splitted[5];
                     joinedPlayer.UUID = splitted[7];
-                    PlayerListManager.PlayerList.Add(joinedPlayer);
-                    PlayerListManager.Display(MainWin);
+                    PlayerListManager.Add(joinedPlayer, MainWin);
 
                 }
-                else
-                    OutputHandler.Log(output);
+                OutputHandler.Log(output);
             }
             else
                 OutputHandler.Log(output);
@@ -116,7 +113,6 @@ namespace ServerLauncher.Server
                 string[] disconnectMessage = output.Split(' ');
 
                 PlayerListManager.Remove(disconnectMessage[2], MainWin);
-                PlayerListManager.Display(MainWin);
                 OutputHandler.Log(output);
             }
             else if (output.ToLower().Contains("**** failed to bind to port"))

@@ -9,7 +9,7 @@ namespace ServerLauncher.Client
 
         public override string ToString()
         {
-            return $"Username: {Username}, UUID: {UUID}, IP: {IP}";
+            return Username;
         }
 
     }
