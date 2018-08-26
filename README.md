@@ -19,8 +19,9 @@ Testing phase. Please try to break it and report how you broke it.
 
 ### Screenshots:
 Please note that these are far from final and are bound to change!
-[Console]: https://darkeyedragon.me/images/console.png "Console"
-[Statistics]: https://darkeyedragon.me/images/statistics.png "Statistics"
+[[https://darkeyedragon.me/images/console.png|alt=Console]]
+[[https://darkeyedragon.me/images/statistics.png|alt=Statistics]]
+
 
 
 ### Versions:
