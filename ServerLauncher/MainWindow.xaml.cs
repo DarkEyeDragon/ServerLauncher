@@ -2,19 +2,44 @@
 using ServerLauncher.Client;
 using ServerLauncher.Server;
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 
 namespace ServerLauncher
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : INotifyPropertyChanged
     {
         public bool Debug { get; set; }
         public JavaServer JavaServer { get; set; }
+        private string _ramUsagePercent;
+        public string RamUsagePercent
+        {
+            get => _ramUsagePercent;
+            set
+            {
+                if (_ramUsagePercent == value) return;
+                _ramUsagePercent = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _ramUsageMegabyte;
+        public string RamUsageMegabyte
+        {
+            get => _ramUsageMegabyte;
+            set
+            {
+                if (_ramUsageMegabyte == value) return;
+                _ramUsageMegabyte = value;
+                OnPropertyChanged();
+            }
+        }
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = JavaServer;
+            DataContext = this;
             ConfigHandler.Create();
             ConfigHandler.Load();
             Settings.Load();
@@ -95,5 +120,12 @@ namespace ServerLauncher
             e.Cancel = false;
             
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }

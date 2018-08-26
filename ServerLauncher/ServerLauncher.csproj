@@ -98,6 +98,7 @@
     <Compile Include="Client\Settings.cs" />
     <Compile Include="Client\OutputHandler.cs" />
     <Compile Include="Client\Watchdog.cs" />
+    <Compile Include="Graphs\GridBase.cs" />
     <Compile Include="Graphs\LineGraph.cs" />
     <Compile Include="Graphs\PointShapeLine.cs" />
     <Compile Include="Server\CommandExecutor.cs" />

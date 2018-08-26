@@ -3,49 +3,44 @@ using System.Linq;
 
 namespace ServerLauncher.Client
 {
-    class DataSet
+    class DataSet : List<double>
     {
 
-        public List<double> DataIntsList { get; set; }
+        public List<double> DataDoubleList { get; set; }
 
         public int Size { get; set; }
         public DataSet(int size)
         {
             Size = size;
-            DataIntsList = new List<double>(size);
+            DataDoubleList = new List<double>(size);
         }
 
         public void Insert(double value)
         {
-            if (DataIntsList.Count < Size)
+            if (DataDoubleList.Count < Size)
             {
-                DataIntsList.Add(value);
+                DataDoubleList.Add(value);
             }
             else
             {
-                double[] dataIntArray = DataIntsList.ToArray();
-                DataIntsList = dataIntArray.Skip(1).Concat(dataIntArray.Take(1)).ToList();
+                double[] dataIntArray = DataDoubleList.ToArray();
+                DataDoubleList = dataIntArray.Skip(1).Concat(new []{value}).ToList();
             }
         }
 
         public double Max()
         {
-            return DataIntsList.ToArray().Max();
+            return DataDoubleList.ToArray().Max();
         }
 
         public double Get(int index)
         {
-            return DataIntsList.IndexOf(index);
-        }
-
-        public double[] ToArray()
-        {
-            return DataIntsList.ToArray();
+            return DataDoubleList.IndexOf(index);
         }
 
         public List<double> ToList()
         {
-            return DataIntsList;
+            return DataDoubleList;
         }
     }
 }

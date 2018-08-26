@@ -1,5 +1,5 @@
 # ServerLauncher
-Custom server launcher
+Custom server launcher for [Minecraft](https://minecraft.net)
 
 Testing phase. Please try to break it and report how you broke it.
 
@@ -21,8 +21,8 @@ Testing phase. Please try to break it and report how you broke it.
 ### Versions:
 
 #### Pre-release 1.3:
-	- Ditched the graph library
-	- Optimized some code
+- Ditched the graph library
+- Optimized some code
 
-#### Pre-release 1.2-1.0:
-	- No changelog.
+#### Pre-release 1.0-1.2:
+- No changelog.

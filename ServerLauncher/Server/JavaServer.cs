@@ -16,27 +16,44 @@ namespace ServerLauncher.Server
         public MainWindow MainWin { get; set; }
         private string Folder { get; set; }
         private string XMS { get; set; }
-        private int currentRam;
         private DataSet RamDataSet { get; set; }
 
         LineGraph graph;
         RamChartUpdater updater;
 
+        private PerformanceCounter _performanceCounter;
 
-        public int RAM
+
+        public double GetBytesUsed()
         {
-            get {
-                process.Refresh();
-                if (!process.HasExited)
-                    return (int)process.PrivateMemorySize64/ 1048576;
-                else
-                    return 0;
-            }
-            set { currentRam = value; }
+            return _performanceCounter.NextValue();
         }
 
-
         public string XMX { get; set; }
+
+        public int XMXInt
+        {
+            get
+            {
+                try
+                {
+                    if (XMX.ToLower().Contains("g"))
+                    {
+                        return (Convert.ToInt16(XMX.Remove(XMX.Length-1)) * 1024);
+                    }
+                    if (XMX.ToLower().Contains("m"))
+                    {
+                        return Convert.ToInt16(XMX.Remove(XMX.Length - 1));
+                    }
+                    return -1;
+                }
+                catch (Exception ex)
+                {
+                    Output(ex.Message);
+                    return -1;
+                }
+            }
+        }
 
         public Process ServerProcess { get => process; }
 
@@ -70,7 +87,7 @@ namespace ServerLauncher.Server
             {
                 //graph = new PointShapeLine();
                 RamDataSet = new DataSet(20);
-                graph = new LineGraph(RamDataSet, 1000);
+                graph = new LineGraph(RamDataSet, XMXInt);
                 //graph.Draw();
             }
             if (updater == null)
@@ -78,6 +95,14 @@ namespace ServerLauncher.Server
             else
                 updater.Timer.Start();
             Watchdog.Start();
+
+
+            _performanceCounter = new PerformanceCounter
+            {
+                CategoryName = "Process",
+                CounterName = "Working Set - Private",
+                InstanceName = process.ProcessName
+            };
         }
 
         public void Stop()

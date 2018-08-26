@@ -19,6 +19,8 @@ namespace ServerLauncher.Graphs
         public double Width { get; set; }
         public double Height { get; set; }
         public int Max { get; set; }
+        public double ScaleX { get; set; }
+        public double ScaleY { get; set; }
         public LineGraph(DataSet dataSet, int max)
         {
             main = ((MainWindow)(Application.Current.MainWindow));
@@ -36,65 +38,42 @@ namespace ServerLauncher.Graphs
         {
             Width = main.lineGraph.ActualWidth;
             Height = main.lineGraph.ActualHeight;
-
-            double scaleX = Width / DataSet.Size;
-            double scaleY = Height / DataSet.Max();
             SolidColorBrush color = new SolidColorBrush();
-            color.Color = Colors.OrangeRed;
-            for (int x = 0; x < DataSet.DataIntsList.Count; x++)
+            color.Color = Colors.CornflowerBlue;
+            for (int x = 0; x < DataSet.DataDoubleList.Count; x++)
             {
 
-                if (x + 1 < DataSet.DataIntsList.Count)
+                if (x + 1 < DataSet.DataDoubleList.Count)
                 {
-                    Line dataLine = new Line
+                    var dataLine = new Line
                     {
-                        X1 = x * scaleX,
-                        Y1 = Height - (DataSet.DataIntsList[x]) * scaleY,
+                        X1 = x * ScaleX,
+                        Y1 = Height - (DataSet.DataDoubleList[x]) * ScaleY,
                         Stroke = color,
-                        X2 = (x + 1) * scaleX,
-                        Y2 = Height - (DataSet.DataIntsList[x+1]) * scaleY,
+                        X2 = (x + 1) * ScaleX,
+                        Y2 = Height - (DataSet.DataDoubleList[x+1]) * ScaleY,
                         StrokeThickness = 1
                     };
-                    Debug.WriteLine($"Y1:{dataLine.Y1} Y2:{dataLine.Y2} DataSet:{DataSet.DataIntsList[x]}");
+                    //Debug.WriteLine($"Y1:{dataLine.Y1} Y2:{dataLine.Y2} DataSet:{DataSet.DataDoubleList[x]}");
                     main.lineGraph.Children.Add(dataLine);
                 }
                 else
                 {
-                    Line dataLine = new Line
+                    var dataLine = new Line
                     {
-                        X1 = x * scaleX,
-                        Y1 = Height - (DataSet.DataIntsList[x])*scaleY,
+                        X1 = x * ScaleX,
+                        Y1 = Height - (DataSet.DataDoubleList[x])* ScaleY,
                         Stroke = color,
-                        X2 = (x) * scaleX,
-                        Y2 = Height - (DataSet.DataIntsList[x])*scaleY,
+                        X2 = (x) * ScaleX,
+                        Y2 = Height - (DataSet.DataDoubleList[x])* ScaleY,
                         StrokeThickness = 1
 
                     };
-                    Debug.WriteLine($"Y1:{dataLine.Y1} Y2:{dataLine.Y2} DataSet:{DataSet.DataIntsList[x]}");
+                    //Debug.WriteLine($"Y1:{dataLine.Y1} Y2:{dataLine.Y2} DataSet:{DataSet.DataDoubleList[x]}");
                     main.lineGraph.Children.Add(dataLine);
-                }
-
-                /*if (x + 1 <= DataSet.Size)
-                {
-                    Line dataLine = new Line
-                    {
-                        X1 = x * scaleX,
-                        Y1 = DataSet.DataIntsList[x],
-                        Stroke = color,
-                        X2 = (x+1) * scaleX,
-                        Y2 = DataSet.DataIntsList[x],
-                        StrokeThickness = 1
-
-                    };
-                    Debug.WriteLine($"Y1:{dataLine.Y1} Y2:{dataLine.Y2} DataSet:{DataSet.DataIntsList[x ]}");
-                    main.lineGraph.Children.Add(dataLine);
-                }*/
-
-                if (x + 1 < DataSet.Size)
-                {
-                    
                 }
             }
+            Console.WriteLine("[{0}]", string.Join(", ", DataSet.DataDoubleList));
         }
 
         public void Clear()
