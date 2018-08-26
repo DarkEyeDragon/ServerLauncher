@@ -11,7 +11,7 @@ using System.Windows.Media;
 
 namespace ServerLauncher.Graphs
 {
-    public class PointShapeLine : UserControl
+    /*public class PointShapeLine : UserControl
     {
         MainWindow main;
         public PointShapeLine()
@@ -38,5 +38,5 @@ namespace ServerLauncher.Graphs
         {
             while (main.stats.Series.Count > 0) { main.stats.Series.RemoveAt(0); }
         }
-    }
+    }*/
 }

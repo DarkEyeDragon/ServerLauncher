@@ -2,33 +2,48 @@
 using ServerLauncher.Server;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
+using ServerLauncher.Client;
 
 namespace ServerLauncher.Timers
 {
     class RamChartUpdater
     {
         private JavaServer Server { get; set; }
-        private PointShapeLine Graph { get; set; }
+        private LineGraph Graph { get; set; }
         public DispatcherTimer Timer { get; set; }
-        public RamChartUpdater(JavaServer server, PointShapeLine graph)
+        public DataSet DataSet { get; set; }
+        private Random random = new Random();
+        public RamChartUpdater(LineGraph graph, DataSet dataSet, JavaServer server)
         {
             Timer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromSeconds(2)
+                Interval = TimeSpan.FromMilliseconds(100)
             };
             Timer.Tick += timer_Tick;
             Timer.Start();
-            Server = server;
             Graph = graph;
+            DataSet = dataSet;
+            Server = server;
         }
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            if (Graph.SeriesCollection[0].Values.Count == 10)
+            
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+
+                Graph.Clear();
+                Graph.DataSet = DataSet;
+                DataSet.Insert(Server.RAM);
+                Graph.Draw();
+            });
+            /*if (Graph.SeriesCollection[0].Values.Count == 10)
             {
                 Graph.SeriesCollection[0].Values.RemoveAt(0);
                 Graph.SeriesCollection[0].Values.Add(Convert.ToInt32(Server.RAM));
@@ -37,7 +52,7 @@ namespace ServerLauncher.Timers
             {
                 Graph.SeriesCollection[0].Values.Add(Convert.ToInt32(Server.RAM));
 
-            }
+            }*/
 
 
         }

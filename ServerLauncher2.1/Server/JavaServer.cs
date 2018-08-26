@@ -17,8 +17,9 @@ namespace ServerLauncher.Server
         private string Folder { get; set; }
         private string XMS { get; set; }
         private int currentRam;
+        private DataSet RamDataSet { get; set; }
 
-        PointShapeLine graph;
+        LineGraph graph;
         RamChartUpdater updater;
 
 
@@ -43,6 +44,7 @@ namespace ServerLauncher.Server
         {
             XMS = xms;
             XMX = xmx;
+
             MainWin = ((MainWindow)(Application.Current.MainWindow));
             Folder = MainWin.inputJarLocation.Text;
             ServerJar = Path.GetFileName(MainWin.inputJarLocation.Text);
@@ -66,10 +68,13 @@ namespace ServerLauncher.Server
             //TODO FIX GRAPH
             if (graph == null)
             {
-                graph = new PointShapeLine();
+                //graph = new PointShapeLine();
+                RamDataSet = new DataSet(20);
+                graph = new LineGraph(RamDataSet, 1000);
+                //graph.Draw();
             }
             if (updater == null)
-                updater = new RamChartUpdater(this, graph);
+                updater = new RamChartUpdater(graph, RamDataSet, this);
             else
                 updater.Timer.Start();
             Watchdog.Start();
@@ -78,7 +83,7 @@ namespace ServerLauncher.Server
         public void Stop()
         {
             process.StandardInput.WriteLine("stop");
-            graph.Clear();
+            //graph.Clear();
             updater.Timer.Stop();
             Watchdog.Stop();
         }

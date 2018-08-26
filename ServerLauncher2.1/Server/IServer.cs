@@ -7,7 +7,7 @@ namespace ServerLauncher.Server
         Process ServerProcess { get;}
         void Start();
         void Stop();
-        //void Output(string output);
+        void Output(string output);
         void Input(string input);
     }
 }
