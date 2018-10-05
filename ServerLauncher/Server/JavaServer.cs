@@ -26,7 +26,15 @@ namespace ServerLauncher.Server
 
         public double GetBytesUsed()
         {
-            return _performanceCounter.NextValue();
+            try
+            {
+                return _performanceCounter.NextValue();
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+
         }
 
         public string XMX { get; set; }
@@ -70,46 +78,53 @@ namespace ServerLauncher.Server
         public void Start()
         {
             Output($"Starting server with XMS: {XMS} and XMX: {XMX}");
-            process = new Process();
-            process.StartInfo.FileName = "java";
-            process.StartInfo.Arguments = $"-Xms{XMS} -Xmx{XMX} -jar {ServerJar} nogui";
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Folder);
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardInput = true;
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.RedirectStandardError = false;
-            process.OutputDataReceived += (sender, args) => { Output(args.Data); };
-            process.Start();
-            process.BeginOutputReadLine();
-            //TODO FIX GRAPH
-            if (graph == null)
+            try
             {
-                //graph = new PointShapeLine();
-                RamDataSet = new DataSet(20);
-                graph = new LineGraph(RamDataSet, XMXInt);
-                //graph.Draw();
+                process = new Process();
+                process.StartInfo.FileName = "java";
+                process.StartInfo.Arguments = $"-Xms{XMS} -Xmx{XMX} -jar {ServerJar} nogui";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Folder);
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardInput = true;
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.RedirectStandardError = false;
+                process.OutputDataReceived += (sender, args) => { Output(args.Data); };
+                process.Start();
+                process.BeginOutputReadLine();
+                //TODO FIX GRAPH
+                if (graph == null)
+                {
+                    //graph = new PointShapeLine();
+                    RamDataSet = new DataSet(20);
+                    graph = new LineGraph(RamDataSet, XMXInt);
+                    //graph.Draw();
+                }
+                 _performanceCounter = new PerformanceCounter
+                {
+                    CategoryName = "Process",
+                    CounterName = "Working Set - Private",
+                    InstanceName = process.ProcessName
+                };
+                if (updater == null)
+                    updater = new RamChartUpdater(graph, RamDataSet, this);
+                else
+                    updater.Timer.Start();
+                Watchdog.Start();
             }
-            if (updater == null)
-                updater = new RamChartUpdater(graph, RamDataSet, this);
-            else
-                updater.Timer.Start();
-            Watchdog.Start();
-
-
-            _performanceCounter = new PerformanceCounter
+            catch (Exception e)
             {
-                CategoryName = "Process",
-                CounterName = "Working Set - Private",
-                InstanceName = process.ProcessName
-            };
+                //OutputHandler.Log(e.StackTrace);
+                updater?.Timer.Stop();
+                Watchdog.Stop();
+            }
         }
 
         public void Stop()
         {
             process.StandardInput.WriteLine("stop");
             //graph.Clear();
-            updater.Timer.Stop();
+            updater?.Timer.Stop();
             Watchdog.Stop();
         }
 

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using ServerLauncher.Config;
 
 namespace ServerLauncher
 {
@@ -40,7 +41,6 @@ namespace ServerLauncher
         {
             InitializeComponent();
             DataContext = this;
-            ConfigHandler.Create();
             ConfigHandler.Load();
             Settings.Load();
             JavaServer = new JavaServer(inputXMS.Text, inputXMX.Text);
@@ -94,9 +94,13 @@ namespace ServerLauncher
 
         private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
         {
-            String[] startupSettings = { inputXMS.Text, inputXMX.Text, inputJarLocation.Text, checkboxAutoStart.IsChecked.ToString(), checkboxDebug.IsChecked.ToString() };
-            ConfigItem configItem = new ConfigItem { Name = "Startup", Items = startupSettings };
-            ConfigHandler.Add(configItem);
+            ConfigHandler.Config.Contents.Clear();
+            ConfigHandler.Config.Contents.Add("xms", inputXMS.Text);
+            ConfigHandler.Config.Contents.Add("xmx", inputXMX.Text);
+            ConfigHandler.Config.Contents.Add("serverJarPath", inputJarLocation.Text);
+            ConfigHandler.Config.Contents.Add("autoStart", checkboxAutoStart.IsChecked.ToString());
+            ConfigHandler.Config.Contents.Add("debug", checkboxDebug.IsChecked.ToString());
+            ConfigHandler.Save();
             ConfigHandler.Load();
             Debug = (bool)checkboxDebug.IsChecked;
 

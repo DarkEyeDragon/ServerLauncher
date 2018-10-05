@@ -73,7 +73,6 @@ namespace ServerLauncher.Graphs
                     main.lineGraph.Children.Add(dataLine);
                 }
             }
-            Console.WriteLine("[{0}]", string.Join(", ", DataSet.DataDoubleList));
         }
 
         public void Clear()

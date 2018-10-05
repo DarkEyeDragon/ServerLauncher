@@ -90,14 +90,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Client\ConfigHandler.cs" />
-    <Compile Include="Client\ConfigItem.cs" />
     <Compile Include="Client\DataSet.cs" />
     <Compile Include="Client\Player.cs" />
     <Compile Include="Client\PlayerListManager.cs" />
     <Compile Include="Client\Settings.cs" />
     <Compile Include="Client\OutputHandler.cs" />
     <Compile Include="Client\Watchdog.cs" />
+    <Compile Include="Config\Config.cs" />
+    <Compile Include="Config\ConfigHandler.cs" />
     <Compile Include="Graphs\GridBase.cs" />
     <Compile Include="Graphs\LineGraph.cs" />
     <Compile Include="Graphs\PointShapeLine.cs" />

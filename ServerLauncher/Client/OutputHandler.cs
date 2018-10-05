@@ -10,13 +10,18 @@ namespace ServerLauncher.Client
     enum Level {INFO, WARN, ERROR}
     static class OutputHandler
     {
-        private static MainWindow main = ((MainWindow)(Application.Current.MainWindow));
+        static readonly MainWindow main = (MainWindow)(Application.Current.MainWindow);
+
         public static void Log(string output, Level level)
         {
             if (!string.IsNullOrEmpty(output) && main != null)
             {
-                Application.Current.Dispatcher.Invoke(new Action(() =>
+                Application.Current.Dispatcher.Invoke(() =>
                 {
+                    if (main.outputstream.Inlines.Count > 100)
+                    {
+                        main.outputstream.Inlines.Remove(main.outputstream.Inlines.FirstInline);
+                    }
                     Run outputLine = new Run();
                     if (level == Level.INFO)
                         outputLine = new Run(output + Environment.NewLine);
@@ -26,18 +31,21 @@ namespace ServerLauncher.Client
                         outputLine = new Run(output + Environment.NewLine) { Foreground = Brushes.Red };
                     main.outputstream.Inlines.Add(outputLine);
                     main.scrollviewer.ScrollToBottom();
-                }));
+                });
             }
         }
         public static void Log(string output)
         {
             if (!string.IsNullOrEmpty(output))
             {
-                main.Dispatcher.Invoke(new Action(() =>
+                main.Dispatcher.Invoke(() =>
                 {
                     try
                     {
-                        MainWindow main = ((MainWindow)Application.Current.MainWindow);
+                        if (main.outputstream.Inlines.Count > 100)
+                        {
+                            main.outputstream.Inlines.Remove(main.outputstream.Inlines.FirstInline);
+                        }
                         if (main == null) return;
                         main.outputstream.Inlines.Add(new Run(output + Environment.NewLine));
                         main.scrollviewer.ScrollToBottom();
@@ -47,7 +55,7 @@ namespace ServerLauncher.Client
                         Debug.WriteLineIf(main == null, e);
                     }
                     
-                }));
+                });
             }
         }
     }

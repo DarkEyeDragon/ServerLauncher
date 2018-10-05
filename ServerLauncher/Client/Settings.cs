@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
+using ServerLauncher.Config;
 
 namespace ServerLauncher.Client
 {
@@ -21,15 +23,14 @@ namespace ServerLauncher.Client
             try
             {
                 MainWindow main = ((MainWindow)(Application.Current.MainWindow));
-                string xms = ConfigHandler.Startup.Items[0];
-                string xmx = ConfigHandler.Startup.Items[1];
-                string serverJarPath = ConfigHandler.Startup.Items[2];
-                bool autoStart = Convert.ToBoolean(ConfigHandler.Startup.Items[3]);
+                string xms = ConfigHandler.Config.Contents["xms"];
+                string xmx = ConfigHandler.Config.Contents["xmx"];
+                string serverJarPath = ConfigHandler.Config.Contents["serverJarPath"];
+                bool autoStart = Convert.ToBoolean(ConfigHandler.Config.Contents["autoStart"]);
                 main.inputXMS.Text = xms;
                 main.inputXMX.Text = xmx;
                 main.inputJarLocation.Text = serverJarPath;
                 main.checkboxAutoStart.IsChecked = autoStart;
-
                 Xms = xms;
                 Xmx = xmx;
                 ServerJarPath = serverJarPath;
@@ -38,13 +39,14 @@ namespace ServerLauncher.Client
             }
             catch (Exception ex)
             {
-                if(ex is NullReferenceException)
+                if(ex is KeyNotFoundException || ex is NullReferenceException)
                 {
                     ConfigHandler.SetDefault();
                 }
                 else
                 {
                     OutputHandler.Log(ex.ToString(), Level.ERROR);
+                    OutputHandler.Log("This is an unhandled Exception. Please report this issue on https://github.com/DarkEyeDragon/ServerLauncher/issues", Level.ERROR);
                 }
             }
         }

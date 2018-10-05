@@ -4,7 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Minecraft Server Launcher" Height="445" Width="681"
+        Title="Minecraft Server Launcher" Height="450" Width="700"
+        MinHeight="450"
+        MinWidth="700"
         Closing="Window_Closing">
     <Grid>
         <TabControl>
@@ -28,10 +30,10 @@
                         <TextBlock Text="Settings"/>
                     </StackPanel>
                 </TabItem.Header>
-                <GroupBox Header="Startup Settings" HorizontalAlignment="Center" Height="200" Margin="0,30,0,0" VerticalAlignment="Top" Width="501">
-                    <Grid HorizontalAlignment="Center" Margin="10,0,-2,0" Width="481" VerticalAlignment="Top">
-                        <Button Name="btnJarLocation" Margin="393,31,86,300.8" Content="browse..." Click="btnJarLocation_Click"></Button>
-                        <TextBox Name="inputJarLocation" HorizontalAlignment="Left" Height="23" Margin="76,32,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="302"/>
+                <GroupBox Header="Startup Settings" Height="329" Margin="20" VerticalAlignment="Top">
+                    <Grid HorizontalAlignment="Center" Margin="10,10,-2,0" Width="614" VerticalAlignment="Top">
+                        <Button Name="btnJarLocation" Margin="517,32,10,109" Content="browse..." Click="btnJarLocation_Click"></Button>
+                        <TextBox Name="inputJarLocation" HorizontalAlignment="Left" Height="23" Margin="76,32,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="436"/>
                         <TextBox Name="inputXMS" HorizontalAlignment="Left" Height="23" Margin="76,84,0,0" TextWrapping="Wrap" Text="256M" VerticalAlignment="Top" Width="150"/>
                         <TextBox Name="inputXMX" HorizontalAlignment="Left" Height="23" Margin="76,113,0,0" TextWrapping="Wrap" Text="2G" VerticalAlignment="Top" Width="150"/>
                         <Label Content="XMS:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,81,0,0" Width="44" Height="26"/>
@@ -39,7 +41,7 @@
                         <Button Name="BtnSaveSettings1" Content="Save" HorizontalAlignment="Left" Margin="76,141,0,0" VerticalAlignment="Top" Width="82" Click="BtnSaveSettings_Click" Height="23" />
                         <Label Content="Server JAR" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,29,0,0"/>
                         <CheckBox Name="checkboxAutoStart" Content="Autostart server" HorizontalAlignment="Left" Margin="274,87,0,0" VerticalAlignment="Top"/>
-                        <CheckBox x:Name="checkboxDebug" Content="Debug" HorizontalAlignment="Left" Margin="274,118,0,0" VerticalAlignment="Top"/>
+                        <CheckBox x:Name="checkboxDebug" Content="Debug" HorizontalAlignment="Left" Margin="274,118,0,0" VerticalAlignment="Top" IsEnabled="False"/>
                     </Grid>
                 </GroupBox>
             </TabItem>
@@ -53,10 +55,10 @@
                     <Border BorderBrush="CornflowerBlue" BorderThickness="1" Margin="150,50,30,112">
                         <Canvas Name="lineGraph"  Margin="0"/>
                     </Border>
-                    <Label Content="Usage" Width="100" Margin="150,278,0,0" FontSize="10" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                    <Label Content="MegaBytes" Width="100" Margin="288,278,0,0" FontSize="10" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                    <Label Content="{Binding Path=RamUsagePercent}" Width="133" Margin="150,301,0,0" FontSize="24" VerticalAlignment="Top" HorizontalAlignment="Left" Height="53"/>
-                    <Label Content="{Binding Path=RamUsageMegabyte}" Width="133" Margin="288,301,0,0" FontSize="24" VerticalAlignment="Top" HorizontalAlignment="Left" Height="53"/>
+                    <Label Content="Usage" Width="100" Margin="150,0,0,68" FontSize="10" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                    <Label Content="MegaBytes" Width="100" Margin="288,0,0,68" FontSize="10" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                    <Label Content="{Binding Path=RamUsagePercent}" Width="133" Margin="150,0,0,10" FontSize="24" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="53"/>
+                    <Label Content="{Binding Path=RamUsageMegabyte}" Width="133" Margin="288,0,0,10" FontSize="24" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="53"/>
                 </Grid>
             </TabItem>
             <TabItem>
